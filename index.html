@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スケジュール管理</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    
+    <div class="container">
+
+        <!-- 左 -->
+        <aside class="sideber">
+            <h2>メニュー</h2>
+
+            <ul>
+                <li>ホーム</li>
+                <li>スケジュール</li>
+                <li>タスク一覧</li>
+            </ul>
+
+            <div class="category">
+                <h3>カテゴリー</h3>
+                <button category-btn>+</button>
+
+                <div class="category-item work">仕事</div>
+
+                <div class="category-item study">勉強</div>
+
+                <div class="category-item exercise">運動</div>
+
+                <div class="category-item private">プライベート</div>
+
+            </div>
+        </aside>
+
+        <!-- 真ん中 -->
+         <main class="calender-area">
+            <div class="calender-header">
+                <button><</button>
+                <h2 class="month-title"></h2>
+                <button>></button>
+            </div>
+
+            <div class="week-row">
+
+                <div class="week">日</div>
+                <div class="week">月</div>
+                <div class="week">火</div>
+                <div class="week">水</div>
+                <div class="week">木</div>
+                <div class="week">金</div>
+                <div class="week">土</div>
+
+            </div>
+
+            <div class="calender"></div>
+
+            <div class="schedule-list"></div>
+            
+
+         </main>
+
+         <!-- 右 -->
+          <section class="schedule-fome">
+            <h2>予定追加</h2>
+
+            <label>日付</label>
+            <input type="date" class="date-input">
+
+            <label>時間</label>
+            <input type="time" class="time-input">
+
+            <div class="input-group">
+                <label>カテゴリー</label>
+
+                <select class="category-select">
+
+                <option>仕事</option>
+                <option>勉強</option>
+                <option>運動</option>
+                <option>プライベート</option>
+
+                </select>
+
+            </div>
+            
+
+            <label>予定</label>
+            <textarea class="task-input"></textarea>
+
+            <button class="add-btn">追加</button>
+
+          </section>
+
+    </div>
+
+    <script src="./main.js"></script>
+
+</body>
+</html>
