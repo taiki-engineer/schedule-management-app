@@ -62,6 +62,36 @@ function createCalender() {
     
 };
 
+addButton.addEventListener("click", () => {
+    const date = dateInput.value;
+    const time = timeInput.value;
+    const scheduleText = scheduleInput.value;
+    const dayNumber = Number(date.split("-")[2]);
+    const targetDay = document.querySelector(`[date-day="${dayNumber}"]`);
+    const category = categorySelect.value;
+    let categoryColor = "";
+
+    if (category === "仕事") {
+        categoryColor = "red";
+    }
+
+    if (category === "勉強") {
+        categoryColor = "blue";
+    }
+    if (category === "運動") {
+        categoryColor = "green";
+    }
+    if (category === "プライベート") {
+        categoryColor = "purple";
+    }
+
+    targetDay.innerHTML += `
+        <p class="schedule-item" style="background-color:${categoryColor}">${scheduleText}</p>
+    `;
+
+    console.log(category);
+    console.log(categoryColor);
+});
 
 
 createCalender();
