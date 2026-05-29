@@ -93,5 +93,29 @@ addButton.addEventListener("click", () => {
     console.log(categoryColor);
 });
 
+const prevBtn = document.querySelector(".prevBtn");
+const nextBtn = document.querySelector(".nextBtn");
+
+prevBtn.addEventListener("click", () => {
+    month--;
+
+    if (month < 0) {
+        month = 11;
+        year--;
+    }
+
+    createCalender();
+});
+
+nextBtn.addEventListener("click", () => {
+    month++;
+
+    if (month > 11) {
+        month = 0;
+        year++;
+    }
+
+    createCalender();
+});
 
 createCalender();
