@@ -13,16 +13,16 @@
         <!-- 左 -->
         <aside class="sideber">
             <h2>メニュー</h2>
-
             <ul>
-                <li>ホーム</li>
-                <li>スケジュール</li>
-                <li>タスク一覧</li>
+                <li class="menu-item home-menu">ホーム</li>
+                <li class="menu-item schedule-menu">スケジュール</li>
+                <li class="menu-item list-menu">予定一覧</li>
+                <li class="menu-item task-menu">タスク一覧</li>
             </ul>
 
             <div class="category">
                 <h3>カテゴリー</h3>
-                <button category-btn>+</button>
+
 
                 <div class="category-item work">仕事</div>
 
@@ -32,67 +32,95 @@
 
                 <div class="category-item private">プライベート</div>
 
+                <div class="category-item others">その他</div>
+
             </div>
         </aside>
 
-        <!-- 真ん中 -->
-         <main class="calender-area">
-            <div class="calender-header">
-                <button><</button>
-                <h2 class="month-title"></h2>
-                <button>></button>
-            </div>
+        <section class="home-page hidden">
 
-            <div class="week-row">
+        </section>
 
-                <div class="week">日</div>
-                <div class="week">月</div>
-                <div class="week">火</div>
-                <div class="week">水</div>
-                <div class="week">木</div>
-                <div class="week">金</div>
-                <div class="week">土</div>
 
-            </div>
+        <section class="schedule-page">
+            <main class="calender-area">
+                <div class="calender-header">
+                    <button class="prevBtn"><</button>
+                    <h2 class="month-title"></h2>
+                    <button class="nextBtn">></button>
+                </div>
 
-            <div class="calender"></div>
+                <div class="week-row">
 
-            <div class="schedule-list"></div>
-            
+                    <div class="week">日</div>
+                    <div class="week">月</div>
+                    <div class="week">火</div>
+                    <div class="week">水</div>
+                    <div class="week">木</div>
+                    <div class="week">金</div>
+                    <div class="week">土</div>
 
-         </main>
+                </div>
 
-         <!-- 右 -->
-          <section class="schedule-fome">
-            <h2>予定追加</h2>
+                <div class="calender"></div>
 
-            <label>日付</label>
-            <input type="date" class="date-input">
+                <div class="schedule-list"></div>
+                
 
-            <label>時間</label>
-            <input type="time" class="time-input">
+            </main>
+        
 
-            <div class="input-group">
-                <label>カテゴリー</label>
+            <section class="list-page hidden">
 
-                <select class="category-select">
+                <h2>予定一覧</h2>
 
-                <option>仕事</option>
-                <option>勉強</option>
-                <option>運動</option>
-                <option>プライベート</option>
 
-                </select>
 
-            </div>
-            
+            </section>
 
-            <label>予定</label>
-            <textarea class="task-input"></textarea>
+            <!-- 右 -->
+            <section class="schedule-fome">
+                <h2>予定追加</h2>
 
-            <button class="add-btn">追加</button>
+                <label>日付</label>
+                <input type="date" class="date-input">
 
-          </section>
+                <label>時間</label>
+                <input type="time" class="time-input">
+
+                <div class="input-group">
+                    <label>カテゴリー</label>
+
+                    <select class="category-select">
+
+                    <option>仕事</option>
+                    <option>勉強</option>
+                    <option>運動</option>
+                    <option>プライベート</option>
+                    <option>その他</option>
+
+                    </select>
+
+                </div>
+                
+                <label>タイトル</label>
+                <input type="text" class="title-input">
+
+                <label>メモ</label>
+                <textarea class="task-input"></textarea>
+
+                <button class="add-btn">追加</button>
+
+            </section>
+        </section>
+
+        <section class="list-page hidden">
+                
+        </section>
+
+        <section class="task-page hidden">
+                
+        </section>
 
     </div>
 
