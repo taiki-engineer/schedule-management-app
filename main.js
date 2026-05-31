@@ -16,8 +16,10 @@ const today = new Date();
 let year = today.getFullYear();
 let month = today.getMonth();
 
+const schedules = [];
 
-function createCalender() {
+
+function createCalendar() {
     // 今日の日付取得
 
     calender.innerHTML = "";
@@ -41,11 +43,26 @@ function createCalender() {
         `;
     };
 
+    //今日判定
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
 
 
     for (let i = 1; i <= lastDate; i++) {
+
+        let todayClass = "";
+
+        if (
+            year === todayYear &&
+            month === todayMonth &&
+            i === todayDate
+        ) {
+            todayClass = "today";
+        }
+
         calender.innerHTML += `
-            <div class="day" date-day="${i}">
+            <div class="day ${todayClass}" date-day="${i}">
                 <span class="day-number">${i}</span>
             </div>
         `;
@@ -81,6 +98,8 @@ addButton.addEventListener("click", () => {
     const category = categorySelect.value;
     let categoryColor = "";
 
+    
+
     if (category === "仕事") {
         categoryColor = "red";
     }
@@ -98,12 +117,24 @@ addButton.addEventListener("click", () => {
         categoryColor = "gray";
     }
 
+    schedules.push({
+        date,
+        time,
+        title,
+        memo,
+        category,
+        categoryColor
+    });
+
+    
+
     targetDay.innerHTML += `
         <p class="schedule-item" style="background-color:${categoryColor}">${title}</p>
     `;
 
     console.log(category);
     console.log(categoryColor);
+    console.log(schedules);
 });
 
 
@@ -118,7 +149,7 @@ prevBtn.addEventListener("click", () => {
         year--;
     }
 
-    createCalender();
+    createCalendar();
 });
 
 nextBtn.addEventListener("click", () => {
@@ -129,8 +160,10 @@ nextBtn.addEventListener("click", () => {
         year++;
     }
 
-    createCalender();
+    createCalendar();
 });
+
+createCalendar();
 
 const homeMenu = document.querySelector(".home-menu");
 const scheduleMenu = document.querySelector(".schedule-menu");
@@ -141,6 +174,7 @@ const homePage = document.querySelector(".home-page");
 const schedulePage = document.querySelector(".schedule-page");
 const listPage = document.querySelector(".list-page");
 const taskPage = document.querySelector(".task-page");
+console.log(listPage);
 
 function hidePages() {
     homePage.classList.add("hidden");
@@ -162,6 +196,7 @@ scheduleMenu.addEventListener("click", () => {
 listMenu.addEventListener("click", () => {
     hidePages();
     listPage.classList.remove("hidden");
+    renderList();
 });
 
 taskMenu.addEventListener("click", () => {
@@ -169,4 +204,52 @@ taskMenu.addEventListener("click", () => {
     taskPage.classList.remove("hidden");
 });
 
-createCalender();
+
+const scheduleListContainer = document.querySelector(".schedule-list-container");
+
+function renderList() {
+    scheduleListContainer.innerHTML = "";
+
+    // 日付・時間の並び替え
+    schedules.sort((a, b) => {
+        const dateTimeA = new Date(`${a.date} ${a.time}`)
+        const dateTimeB = new Date(`${b.date} ${b.time}`)
+
+        return dateTimeA - dateTimeB;
+    });
+
+    let currentDate = "";
+
+    schedules.forEach(schedule => {
+
+        if (currentDate !== schedule.date) {
+            const dateTitle = document.createElement("h2");
+
+            dateTitle.textContent = schedule.date;
+
+            scheduleListContainer.appendChild(dateTitle);
+
+            currentDate = schedule.date;
+        }
+
+        const item = document.createElement("div")
+
+        item.classList.add("schedule-card");
+
+        item.innerHTML = `
+        <div class="schedule-header">
+            <span>${schedule.time}</span>
+            <span 
+            class="category-tag" style="background-color:${schedule.categoryColor}">
+                ${schedule.category}</span>
+        </div>
+
+        <h3>${schedule.title}</h3>
+
+        <p>${schedule.memo}</p>
+        `;
+
+        scheduleListContainer.appendChild(item);
+    });
+}
+
