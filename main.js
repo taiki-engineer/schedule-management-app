@@ -268,3 +268,52 @@ function renderList() {
         scheduleListContainer.appendChild(item);
     });
 }
+
+taskAddBtn.addEventListener("click", () => {
+
+    const category = taskCategory.value;
+
+    if (category === "仕事") {
+        categoryColor = "red";
+    }
+
+    if (category === "勉強") {
+        categoryColor = "blue";
+    }
+    if (category === "運動") {
+        categoryColor = "green";
+    }
+    if (category === "プライベート") {
+        categoryColor = "purple";
+    }
+    if (category === "その他") {
+        categoryColor = "gray";
+    }
+
+    const task = {
+        text: taskInput.value,
+        category,
+        categoryColor
+    };
+
+    tasks.push(task);
+    console.log(task);
+    renderTask();
+})
+
+function renderTask() {
+    
+    taskListContainer.innerHTML = "";
+
+    tasks.forEach(task => {
+        const item = document.createElement("div");
+
+        item.innerHTML = `
+            <h3>${task.text}</h3>
+            <span class="category-tag" style="background-color:${task.categoryColor}">
+            ${task.category}</span>
+        `;
+
+        taskListContainer.appendChild(item);
+    });
+}
