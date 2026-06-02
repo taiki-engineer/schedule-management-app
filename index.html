@@ -99,7 +99,7 @@
                 <input type="text" class="title-input">
 
                 <label>メモ</label>
-                <textarea class="task-input"></textarea>
+                <textarea class="memo-input"></textarea>
 
                 <button class="add-btn">追加</button>
 
@@ -114,6 +114,28 @@
 
         <section class="task-page hidden">
             <h2>タスク一覧</h2>
+
+            <div class="task-container">
+
+                <div class="task-list-container">
+                    <!-- タスク表示 -->
+                </div>
+
+                <div class="task-fome">
+
+                    <input type="text" class="task-input" placeholder="タスクを入力">
+
+                    <select class="task-category">
+                        <option>仕事</option>
+                        <option>勉強</option>
+                        <option>運動</option>
+                        <option>プライベート</option>
+                        <option>その他</option>
+                    </select>
+
+                    <button class="task-add-btn">追加</button>
+                </div>
+            </div>
         </section>
 
     </div>
