@@ -1,13 +1,17 @@
 const calender = document.querySelector(".calender");
 const scheduleList = document.querySelector(".schedule-list");
 const monthTitle = document.querySelector(".month-title");
-const input = document.querySelector(".task-input");
+const input = document.querySelector(".memo-input");
 const addButton = document.querySelector(".add-btn");
 const dateInput = document.querySelector(".date-input");
 const timeInput = document.querySelector(".time-input");
 const categorySelect = document.querySelector(".category-select");
 const titleInput = document.querySelector(".title-input");
-const memoInput = document.querySelector(".task-input");
+const memoInput = document.querySelector(".memo-input");
+const taskListContainer = document.querySelector(".task-list-container");
+const taskAddBtn = document.querySelector(".task-add-btn");
+const taskInput = document.querySelector(".task-input");
+const taskCategory = document.querySelector(".task-category");
 let selectedDate = "";
 let categoryColor = "";
 
@@ -16,7 +20,8 @@ const today = new Date();
 let year = today.getFullYear();
 let month = today.getMonth();
 
-const schedules = [];
+let schedules = [];
+let tasks = [];
 
 
 function createCalendar() {
@@ -247,9 +252,19 @@ function renderList() {
         <h3>${schedule.title}</h3>
 
         <p>${schedule.memo}</p>
+
+        <button class="delete-btn">削除</button>
         `;
+
+        const deleteBtn = item.querySelector(".delete-btn");
+
+        deleteBtn.addEventListener("click", () => {
+            schedules = schedules.filter(s => s !== schedule);
+
+            renderList();
+            createCalendar(year, month);
+        })
 
         scheduleListContainer.appendChild(item);
     });
 }
-
