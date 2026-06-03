@@ -293,7 +293,8 @@ taskAddBtn.addEventListener("click", () => {
     const task = {
         text: taskInput.value,
         category,
-        categoryColor
+        categoryColor,
+        completed: false
     };
 
     tasks.push(task);
@@ -305,14 +306,31 @@ function renderTask() {
     
     taskListContainer.innerHTML = "";
 
+    tasks.sort((a, b) => a.completed - b.completed);
+
     tasks.forEach(task => {
         const item = document.createElement("div");
 
+        item.classList.add("task-card")
+
         item.innerHTML = `
-            <h3>${task.text}</h3>
-            <span class="category-tag" style="background-color:${task.categoryColor}">
-            ${task.category}</span>
+            <div class="task-header">
+                <input type="checkbox" class="task-check">
+                <h3 class="${task.completed ? "completed" : ""}">${task.text}</h3>
+                <span class="category-tag" style="background-color:${task.categoryColor}">
+                ${task.category}</span>
+            </div>
         `;
+
+        const checkbox = item.querySelector(".task-check");
+
+        checkbox.checked = task.completed;
+
+        checkbox.addEventListener("change", () => {
+            task.completed = checkbox.checked;
+
+            renderTask();
+        })
 
         taskListContainer.appendChild(item);
     });
