@@ -154,6 +154,22 @@ body {
     font-weight: bold;
 }
 
+.today {
+    border: 2px solid #4f46e5
+}
+
+.today .day-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .schedule-item {
     font-size: 12px;
     padding: 4px 6px;
@@ -166,6 +182,7 @@ body {
     border: 1px solid #d9d8d8;
     border-radius: 12px;
 }
+
 
 .hidden {
     display: none;
@@ -229,10 +246,116 @@ body {
     height: 35px;
 }
 
-.ctegory-select {
+.category-select,
+.task-category {
 
     padding: 3px;
     border-radius: 5px;
     margin-top: 3px;
 }
 
+/* 予定一覧 */
+.schedule-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.schedule-card h3 {
+    margin: 10px 0;
+}
+
+.category-tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.delete-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.task-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.task-list-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.task-form {
+    width: 280;
+    padding: 20px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+}
+
+.task-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.task-add-btn {
+        margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+
+    background-color: rgb(67, 43, 248);
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.task-input,
+.task-category {
+    width: 100%;
+    padding: 10px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+.task-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.category-tag {
+    margin-left: auto;
+}
