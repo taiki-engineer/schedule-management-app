@@ -253,7 +253,7 @@ function renderList() {
 
         <p>${schedule.memo}</p>
 
-        <button class="delete-btn">削除</button>
+        <button class="delete-btn">🗑️</button>
         `;
 
         const deleteBtn = item.querySelector(".delete-btn");
@@ -320,6 +320,7 @@ function renderTask() {
                 <span class="category-tag" style="background-color:${task.categoryColor}">
                 ${task.category}</span>
             </div>
+            <button class="delete-task-btn">🗑️</button>
         `;
 
         const checkbox = item.querySelector(".task-check");
@@ -328,6 +329,14 @@ function renderTask() {
 
         checkbox.addEventListener("change", () => {
             task.completed = checkbox.checked;
+
+            renderTask();
+        })
+
+        const deleteBtn = item.querySelector(".delete-task-btn");
+
+        deleteBtn.addEventListener("click", () => {
+            tasks = tasks.filter(t => t !== task);
 
             renderTask();
         })
