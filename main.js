@@ -131,15 +131,10 @@ addButton.addEventListener("click", () => {
         categoryColor
     });
 
-    
+    createCalendar();
+    renderCalendarSchedules();
 
-    targetDay.innerHTML += `
-        <p class="schedule-item" style="background-color:${categoryColor}">${title}</p>
-    `;
-
-    console.log(category);
-    console.log(categoryColor);
-    console.log(schedules);
+    renderHome();
 });
 
 
@@ -155,6 +150,7 @@ prevBtn.addEventListener("click", () => {
     }
 
     createCalendar();
+    renderCalendarSchedules();
 });
 
 nextBtn.addEventListener("click", () => {
@@ -166,7 +162,37 @@ nextBtn.addEventListener("click", () => {
     }
 
     createCalendar();
+    renderCalendarSchedules();
 });
+
+function renderCalendarSchedules() {
+
+    schedules.forEach(schedule => {
+
+        const scheduleDate = new Date(schedule.date);
+
+        if (
+            scheduleDate.getFullYear() === year &&
+            scheduleDate.getMonth() === month
+        ) {
+
+            const day = scheduleDate.getDate();
+
+            const targetDay =
+                document.querySelector(`[date-day="${day}"]`);
+
+            if (targetDay) {
+                targetDay.innerHTML += `
+                    <p class="schedule-item"
+                    style="background-color:${schedule.categoryColor}">
+                        ${schedule.title}
+                    </p>
+                `;
+            }
+        }
+    });
+
+}    
 
 createCalendar();
 
