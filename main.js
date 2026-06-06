@@ -370,3 +370,62 @@ function renderTask() {
         taskListContainer.appendChild(item);
     });
 }
+
+const todayScheduleList = document.querySelector(".today-schedule-list");
+const todayTaskList = document.querySelector(".today-task-list");
+
+
+function renderHome() {
+    renderHomeSchedule();
+    renderHomeTask();
+    
+}
+
+function renderHomeSchedule() {
+    todayScheduleList.innerHTML = "";
+
+    const today = new Date().toISOString().split("T")[0];
+    const todaySchedules = schedules.filter(schedule => {
+        return schedule.date === today;
+    })
+
+    todaySchedules.forEach(schedule => {
+        const item = document.createElement("div");
+
+        item.classList.add("schedule-card");
+
+        item.innerHTML = `
+            <h3>${schedule.title}</h3>
+
+            <p>${schedule.time}</p>
+
+            <span class="category-tag" style="background-color:${schedule.categoryColor}">
+                ${schedule.category}</span>
+        `;
+
+        todayScheduleList.appendChild(item);
+    });
+}
+
+function renderHomeTask() {
+    todayTaskList.innerHTML = "";
+
+    const unfinishedTasks = tasks.filter(task => {
+    return !task.completed;
+    })
+
+    unfinishedTasks.forEach(task => {
+        const item = document.createElement("div");
+
+        item.classList.add("task-card");
+
+        item.innerHTML = `
+            <h3>${task.text}</h3>
+            <span class="category-tag" style="background-color:${task.categoryColor}">
+                ${task.category}</span>
+        `;
+        
+        todayTaskList.appendChild(item);
+    });
+    
+}
