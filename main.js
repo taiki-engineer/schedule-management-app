@@ -429,3 +429,21 @@ function renderHomeTask() {
     });
     
 }
+
+function renderHomeStats() {
+    const totalTaskCount = document.querySelector(".total-task-count");
+    totalTaskCount.textContent = tasks.length;
+
+    const unfinishedTasksCount = document.querySelector(".unfinished-task-count");
+    const unfinishedCount = tasks.filter(task => !task.completed).length;
+    unfinishedTasksCount.textContent = unfinishedCount;
+
+    const completedTaskCount = document.querySelector(".completed-task-count");
+    const completedCount = tasks.filter(task => task.completed).length;
+    completedTaskCount.textContent = completedCount;
+
+    const todayScheduleCount = document.querySelector(".today-schedule-count");
+    const today = new Date().toISOString().split("T")[0];
+    const todayCount = schedules.filter(schedule => schedule.date === today).length;
+    todayScheduleCount.textContent = todayCount;
+}
