@@ -12,6 +12,70 @@ const taskListContainer = document.querySelector(".task-list-container");
 const taskAddBtn = document.querySelector(".task-add-btn");
 const taskInput = document.querySelector(".task-input");
 const taskCategory = document.querySelector(".task-category");
+// スマホ版
+const modal = document.querySelector(".modal");
+const closeModalBtn = document.querySelector(".close-modal-btn");
+const editDate = document.querySelector(".edit-date");
+const editTime = document.querySelector(".edit-time");
+const editCategory = document.querySelector(".edit-category");
+const editTitle = document.querySelector(".edit-title");
+const editMemo = document.querySelector(".edit-memo");
+const saveEditBtn = document.querySelector(".save-edit-btn");
+let editingSchedule = null;
+
+closeModalBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+});
+
+saveEditBtn.addEventListener("click", () => {
+
+    editingSchedule.date = editDate.value;
+    editingSchedule.time = editTime.value;
+    editingSchedule.category = editCategory.value;
+    editingSchedule.title = editTitle.value;
+    editingSchedule.memo = editMemo.value;
+
+    let categoryColor = "";
+
+    if (editCategory.value === "仕事") {
+        categoryColor = "red";
+    }
+
+    if (editCategory.value === "勉強") {
+        categoryColor = "blue";
+    }
+
+    if (editCategory.value === "運動") {
+        categoryColor = "green";
+    }
+
+    if (editCategory.value === "プライベート") {
+        categoryColor = "purple";
+    }
+
+    if (editCategory.value === "その他") {
+        categoryColor = "gray";
+    }
+
+    editingSchedule.categoryColor = categoryColor;
+
+    renderList();
+    createCalendar();
+    renderHome();
+
+    modal.classList.add("hidden");
+
+});
+
+modal.addEventListener("click", (e) => {
+
+    if (e.target === modal) {
+        modal.classList.add("hidden");
+    }
+
+});
+// 
+
 let selectedDate = "";
 let categoryColor = "";
 
@@ -98,8 +162,6 @@ addButton.addEventListener("click", () => {
     const time = timeInput.value;
     const title = titleInput.value;
     const memo = memoInput.value;
-    const dayNumber = Number(date.split("-")[2]);
-    const targetDay = document.querySelector(`[date-day="${dayNumber}"]`);
     const category = categorySelect.value;
     let categoryColor = "";
 
@@ -192,7 +254,7 @@ function renderCalendarSchedules() {
         }
     });
 
-}    
+}
 
 createCalendar();
 
@@ -205,6 +267,51 @@ const homePage = document.querySelector(".home-page");
 const schedulePage = document.querySelector(".schedule-page");
 const listPage = document.querySelector(".list-page");
 const taskPage = document.querySelector(".task-page");
+
+// スマホ用
+
+const menuBtn = document.querySelector(".menu-btn");
+const sidebar = document.querySelector(".sideber");
+
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+});
+
+homeMenu.addEventListener("click", () => {
+
+    hidePages();
+    homePage.classList.remove("hidden");
+
+    sidebar.classList.remove("active");
+});
+
+scheduleMenu.addEventListener("click", () => {
+
+    hidePages();
+    schedulePage.classList.remove("hidden");
+
+    sidebar.classList.remove("active");
+});
+
+listMenu.addEventListener("click", () => {
+
+    hidePages();
+    listPage.classList.remove("hidden");
+
+    sidebar.classList.remove("active");
+});
+
+taskMenu.addEventListener("click", () => {
+
+    hidePages();
+    taskPage.classList.remove("hidden");
+
+    sidebar.classList.remove("active");
+});
+
+// 
+
+
 console.log(listPage);
 
 function hidePages() {
@@ -279,10 +386,25 @@ function renderList() {
 
         <p>${schedule.memo}</p>
 
+
+        <button class="edit-btn">✏️</button>
         <button class="delete-btn">🗑️</button>
         `;
 
+        const editBtn = item.querySelector(".edit-btn");
         const deleteBtn = item.querySelector(".delete-btn");
+
+        editBtn.addEventListener("click", () => {
+            editingSchedule = schedule;
+
+            editDate.value = schedule.date;
+            editTime.value = schedule.time;
+            editCategory.value = schedule.category;
+            editTitle.value = schedule.title;
+            editMemo.value = schedule.memo;
+
+            modal.classList.remove("hidden");
+        });
 
         deleteBtn.addEventListener("click", () => {
             schedules = schedules.filter(s => s !== schedule);
@@ -326,6 +448,7 @@ taskAddBtn.addEventListener("click", () => {
     tasks.push(task);
     console.log(task);
     renderTask();
+    renderHome();
 })
 
 function renderTask() {
@@ -357,6 +480,7 @@ function renderTask() {
             task.completed = checkbox.checked;
 
             renderTask();
+            renderHome();
         })
 
         const deleteBtn = item.querySelector(".delete-task-btn");
@@ -365,12 +489,15 @@ function renderTask() {
             tasks = tasks.filter(t => t !== task);
 
             renderTask();
+            renderHome();
         })
 
         taskListContainer.appendChild(item);
     });
 }
 
+
+// ホーム
 const todayScheduleList = document.querySelector(".today-schedule-list");
 const todayTaskList = document.querySelector(".today-task-list");
 
@@ -378,6 +505,7 @@ const todayTaskList = document.querySelector(".today-task-list");
 function renderHome() {
     renderHomeSchedule();
     renderHomeTask();
+    renderHomeStats();
     
 }
 
@@ -447,3 +575,7 @@ function renderHomeStats() {
     const todayCount = schedules.filter(schedule => schedule.date === today).length;
     todayScheduleCount.textContent = todayCount;
 }
+
+
+
+
