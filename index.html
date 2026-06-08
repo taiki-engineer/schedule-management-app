@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+
+    <header class="mobile-header">
+
+        <button class="menu-btn">☰</button>
+
+    </header>
     
     <div class="container">
 
@@ -155,7 +161,7 @@
                     <!-- タスク表示 -->
                 </div>
 
-                <div class="task-fome">
+                <div class="task-form">
 
                     <input type="text" class="task-input" placeholder="タスクを入力">
 
@@ -171,6 +177,48 @@
                 </div>
             </div>
         </section>
+
+    </div>
+
+    <!-- スマホ用モーダル -->
+    <div class="modal hidden">
+
+        <div class="modal-content">
+
+            <h2>予定編集</h2>
+
+            <label>日付</label>
+            <input type="date" class="date-input edit-date">
+
+            <label>時間</label>
+            <input type="time" class="time-input edit-time">
+
+            <label>カテゴリー</label>
+            <select class="category-select edit-category">
+                <option>仕事</option>
+                <option>勉強</option>
+                <option>運動</option>
+                <option>プライベート</option>
+                <option>その他</option>
+            </select>
+
+            <label>タイトル</label>
+            <input type="text" class="title-input edit-title">
+
+            <label>メモ</label>
+            <textarea class="memo-input edit-memo"></textarea>
+
+            <div class="modal-buttons">
+                <button class="save-edit-btn">
+                    保存
+                </button>
+
+                <button class="close-modal-btn">
+                    閉じる
+                </button>
+            </div>
+
+        </div>
 
     </div>
 
