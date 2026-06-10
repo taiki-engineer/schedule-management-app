@@ -409,3 +409,115 @@ body {
 
     border-radius: 15px;
 }
+
+.mobile-header {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border-radius: 15px;
+        margin-bottom: 15px;
+    }
+
+    .menu-btn {
+        border: none;
+        background: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .sideber {
+        position: fixed;
+
+        top: 0;
+        left: -240px;
+
+        height: 100vh;
+
+        z-index: 1000;
+
+        transition: left 0.3s ease;
+    }
+
+    .sideber.active {
+        left: 0;
+    }
+
+    .schedule-page {
+    grid-template-columns: 1fr;
+    }
+
+    .schedule-fome { 
+        display: none;
+    }
+
+
+
+    .day,
+    .empty {
+        min-height: 60px;
+    }
+
+    .calender-area {
+        padding: 10px;
+    }
+
+        .calender {
+        gap: 4px;
+    }
+
+
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+
+    width: 90%;
+    max-width: 500px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    flex: 1;
+}
+
+.modal.hidden {
+    display: none;
+}
+
