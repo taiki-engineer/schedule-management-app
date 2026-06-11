@@ -112,6 +112,8 @@ function createCalendar() {
         `;
     };
 
+
+
     //今日判定
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
@@ -138,6 +140,9 @@ function createCalendar() {
         
     };
 
+
+    
+
     const totalCells = firstDay + lastDate;
 
     const remainingCalls = 7 - (totalCells % 7);
@@ -155,7 +160,52 @@ function createCalendar() {
         
     }
 
+        document.querySelectorAll(".day").forEach(day => {
+
+        day.addEventListener("click", () => {
+
+            const dayNumber = day.getAttribute("date-day");
+
+            const selectedDate =
+                `${year}-${String(month + 1).padStart(2,"0")}-${String(dayNumber).padStart(2,"0")}`;
+
+            renderSelectedDateSchedule(selectedDate);
+            console.log(selectedDate);
+
+        });
+
+    });
+
 };
+
+
+const selectedDateTitle = document.querySelector(".selected-date-title");
+
+function renderSelectedDateSchedule(date) {
+
+    scheduleList.innerHTML = "";
+
+    selectedDateTitle.textContent = `${date} の予定`;
+
+    const filteredSchedules =
+        schedules.filter(schedule => schedule.date === date);
+
+    filteredSchedules.forEach(schedule => {
+
+        const item = document.createElement("div");
+
+        item.classList.add("schedule-card");
+
+        item.innerHTML = `
+            <h3>${schedule.title}</h3>
+            <p>${schedule.time}</p>
+        `;
+
+        scheduleList.appendChild(item);
+
+    });
+
+}
 
 addButton.addEventListener("click", () => {
     const date = dateInput.value;
