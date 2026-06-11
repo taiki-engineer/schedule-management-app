@@ -414,6 +414,10 @@ body {
     display: none;
 }
 
+.mobile-schedule-section {
+    display: none;
+}
+
 @media (max-width: 768px) {
 
     .mobile-header {
@@ -476,6 +480,13 @@ body {
         gap: 4px;
     }
 
+    .mobile-schedule-section {
+        display: block;
+        margin-top: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+    }
 
 }
 
@@ -520,4 +531,7 @@ body {
 .modal.hidden {
     display: none;
 }
+
+
+
 
