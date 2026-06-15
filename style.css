@@ -418,6 +418,11 @@ body {
     display: none;
 }
 
+.floating-add-btn {
+    display: none;
+}
+
+
 @media (max-width: 768px) {
 
     .mobile-header {
@@ -488,6 +493,33 @@ body {
         border-radius: 15px;
     }
 
+    .floating-add-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+
+        width: 60px;
+        height: 60px;
+
+        border: none;
+        border-radius: 50%;
+
+        font-size: 32px;
+
+        background: #4f46e5;
+        color: white;
+
+        cursor: pointer;
+
+        z-index: 1500;
+
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
 }
 
 .modal {
@@ -507,7 +539,7 @@ body {
     background: white;
 
     width: 90%;
-    max-width: 500px;
+    max-width: 380px;
 
     padding: 20px;
 
@@ -515,6 +547,55 @@ body {
 
     display: flex;
     flex-direction: column;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.modal-content textarea {
+    height: 120px;
+    resize: none;
+}
+
+.modal-content label {
+    margin-bottom: 5px;
+}
+
+.modal-buttons button {
+    padding: 10px;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.save-edit-btn {
+    background: rgb(67, 43, 248);
+    color: white;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+}
+
+
+.close-modal-btn {
+    background: #eee;
 }
 
 .modal-buttons {
