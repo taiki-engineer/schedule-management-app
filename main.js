@@ -21,6 +21,8 @@ const editCategory = document.querySelector(".edit-category");
 const editTitle = document.querySelector(".edit-title");
 const editMemo = document.querySelector(".edit-memo");
 const saveEditBtn = document.querySelector(".save-edit-btn");
+const floatingAddBtn = document.querySelector(".floating-add-btn")
+const modalTitle = document.querySelector(".modal-title");
 let editingSchedule = null;
 
 closeModalBtn.addEventListener("click", () => {
@@ -28,12 +30,6 @@ closeModalBtn.addEventListener("click", () => {
 });
 
 saveEditBtn.addEventListener("click", () => {
-
-    editingSchedule.date = editDate.value;
-    editingSchedule.time = editTime.value;
-    editingSchedule.category = editCategory.value;
-    editingSchedule.title = editTitle.value;
-    editingSchedule.memo = editMemo.value;
 
     let categoryColor = "";
 
@@ -57,14 +53,36 @@ saveEditBtn.addEventListener("click", () => {
         categoryColor = "gray";
     }
 
-    editingSchedule.categoryColor = categoryColor;
+    if (editingSchedule) {
+
+        // 編集
+        editingSchedule.date = editDate.value;
+        editingSchedule.time = editTime.value;
+        editingSchedule.category = editCategory.value;
+        editingSchedule.title = editTitle.value;
+        editingSchedule.memo = editMemo.value;
+        editingSchedule.categoryColor = categoryColor;
+
+    } else {
+
+        // 新規追加
+        schedules.push({
+            date: editDate.value,
+            time: editTime.value,
+            category: editCategory.value,
+            title: editTitle.value,
+            memo: editMemo.value,
+            categoryColor
+        });
+
+    }
 
     renderList();
     createCalendar();
+    renderCalendarSchedules();
     renderHome();
 
     modal.classList.add("hidden");
-
 });
 
 modal.addEventListener("click", (e) => {
@@ -74,6 +92,22 @@ modal.addEventListener("click", (e) => {
     }
 
 });
+
+floatingAddBtn.addEventListener("click", () => {
+    editingSchedule = null;
+
+    modalTitle.textContent = "予定追加";
+
+    editDate.value = "";
+    editTime.value = "";
+    editCategory.value = "仕事";
+    editTitle.value = "";
+    editMemo.value = "";
+
+    modal.classList.remove("hidden");
+
+})
+
 // 
 
 let selectedDate = "";
@@ -446,6 +480,8 @@ function renderList() {
 
         editBtn.addEventListener("click", () => {
             editingSchedule = schedule;
+
+            modalTitle.textContent = "予定編集";
 
             editDate.value = schedule.date;
             editTime.value = schedule.time;
