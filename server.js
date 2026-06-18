@@ -31,6 +31,38 @@ app.get("/test-db", async (req, res) => {
     }
 })
 
+app.post("/schedules", async (req, res) => {
+    try {
+        const {
+            date,
+            time,
+            category,
+            title,
+            memo
+        } = req.body;
+
+        const result = await pool.query(
+            `
+            INSERT INTO schedules
+            (date,time,category,title,memo)
+            VALUES ($1,$2,$3,$4,$5)
+            RETURNING *
+            `,
+            [date,time,category,title,memo]
+        );
+
+        res.status(201).json(result.rows[0]);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "予定保存失敗"
+        });
+    }
+    
+})
+
 app.listen(3000, () => {
     console.log("server start");
 })
