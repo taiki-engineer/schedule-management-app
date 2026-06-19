@@ -61,7 +61,25 @@ app.post("/schedules", async (req, res) => {
         });
     }
     
-})
+});
+
+app.get("/schedules", async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT *
+            FROM schedules
+            ORDER BY date, time
+            `);
+
+            res.json(result.rows);
+    } catch(error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "予定取得失敗"
+        });
+    }
+});
 
 app.listen(3000, () => {
     console.log("server start");
