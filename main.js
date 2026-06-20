@@ -122,6 +122,51 @@ let schedules = [];
 let tasks = [];
 
 
+async function loadSchedules() {
+    try {
+        const response = await fetch("http://localhost:3000/schedules");
+
+        const data = await response.json();
+
+        schedules = data.map(schedule => {
+
+    let categoryColor = "gray";
+
+    if (schedule.category === "仕事") {
+        categoryColor = "red";
+    }
+
+    if (schedule.category === "勉強") {
+        categoryColor = "blue";
+    }
+
+    if (schedule.category === "運動") {
+        categoryColor = "green";
+    }
+
+    if (schedule.category === "プライベート") {
+        categoryColor = "purple";
+    }
+
+    const dateObj = new Date(schedule.date);
+
+    return {
+        ...schedule,
+        date: `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`,
+        categoryColor
+    };
+});
+
+        createCalendar();
+        renderCalendarSchedules();
+        renderHome();
+
+    } catch (error) {
+        console.error("予定取得失敗", error);
+    }
+}
+
+
 function createCalendar() {
     // 今日の日付取得
 
@@ -241,7 +286,9 @@ function renderSelectedDateSchedule(date) {
 
 }
 
-addButton.addEventListener("click", () => {
+addButton.addEventListener("click", async () => {
+
+
     const date = dateInput.value;
     const time = timeInput.value;
     const title = titleInput.value;
@@ -249,7 +296,13 @@ addButton.addEventListener("click", () => {
     const category = categorySelect.value;
     let categoryColor = "";
 
-    
+        console.log({
+        date,
+        time,
+        title,
+        memo,
+        category
+    });
 
     if (category === "仕事") {
         categoryColor = "red";
@@ -268,19 +321,45 @@ addButton.addEventListener("click", () => {
         categoryColor = "gray";
     }
 
-    schedules.push({
-        date,
-        time,
-        title,
-        memo,
-        category,
-        categoryColor
+    // schedules.push({
+    //     date,
+    //     time,
+    //     title,
+    //     memo,
+    //     category,
+    //     categoryColor
+    // });
+
+    // createCalendar();
+    // renderCalendarSchedules();
+
+    // renderHome();
+
+    try {
+    const response = await fetch("http://localhost:3000/schedules", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            date,
+            time,
+            category,
+            title,
+            memo
+        })
     });
 
-    createCalendar();
-    renderCalendarSchedules();
+    if (!response.ok) {
+        throw new Error("保存失敗");
+    }
 
-    renderHome();
+    await loadSchedules();
+
+    } catch (error) {
+        console.error(error);
+    }
+
 });
 
 
@@ -317,6 +396,9 @@ function renderCalendarSchedules() {
 
         const scheduleDate = new Date(schedule.date);
 
+        console.log(schedule.date);
+        console.log(scheduleDate);
+
         if (
             scheduleDate.getFullYear() === year &&
             scheduleDate.getMonth() === month
@@ -340,7 +422,7 @@ function renderCalendarSchedules() {
 
 }
 
-createCalendar();
+loadSchedules();
 
 const homeMenu = document.querySelector(".home-menu");
 const scheduleMenu = document.querySelector(".schedule-menu");
@@ -598,7 +680,8 @@ function renderHome() {
 function renderHomeSchedule() {
     todayScheduleList.innerHTML = "";
 
-    const today = new Date().toISOString().split("T")[0];
+     const now = new Date();
+    const today =`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const todaySchedules = schedules.filter(schedule => {
         return schedule.date === today;
     })
@@ -655,9 +738,10 @@ function renderHomeStats() {
     const completedTaskCount = document.querySelector(".completed-task-count");
     const completedCount = tasks.filter(task => task.completed).length;
     completedTaskCount.textContent = completedCount;
-
+    
+    const now = new Date();
     const todayScheduleCount = document.querySelector(".today-schedule-count");
-    const today = new Date().toISOString().split("T")[0];
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const todayCount = schedules.filter(schedule => schedule.date === today).length;
     todayScheduleCount.textContent = todayCount;
 }
