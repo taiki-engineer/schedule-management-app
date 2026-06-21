@@ -81,6 +81,30 @@ app.get("/schedules", async (req, res) => {
     }
 });
 
+app.delete("/schedules/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await pool.query(
+            `
+            DELETE FROM schedules
+            WHERE id = $1
+            `,
+            [id]
+        );
+
+        res.json({
+            message: "削除成功"
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "削除失敗"
+        });
+    }
+});
+
 app.listen(3000, () => {
     console.log("server start");
 })
