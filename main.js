@@ -574,12 +574,32 @@ function renderList() {
             modal.classList.remove("hidden");
         });
 
-        deleteBtn.addEventListener("click", () => {
-            schedules = schedules.filter(s => s !== schedule);
+        deleteBtn.addEventListener("click", async () => {
 
-            renderList();
-            createCalendar(year, month);
-        })
+            try {
+                const response = await fetch(
+                    `http://localhost:3000/schedules/${schedule.id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("削除失敗");
+                }
+
+                await loadSchedules();
+
+                renderList();
+                createCalendar();
+                renderCalendarSchedules();
+                renderHome();
+
+            } catch (error) {
+                console.error(error);
+            }
+
+        });
 
         scheduleListContainer.appendChild(item);
     });
