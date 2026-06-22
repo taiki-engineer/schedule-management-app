@@ -33,6 +33,8 @@ app.get("/test-db", async (req, res) => {
 
 app.post("/schedules", async (req, res) => {
     try {
+        console.log("受信データ:", req.body);
+
         const {
             date,
             time,
@@ -65,6 +67,7 @@ app.post("/schedules", async (req, res) => {
 
 app.get("/schedules", async (req, res) => {
     try {
+
         const result = await pool.query(`
             SELECT *
             FROM schedules
@@ -101,6 +104,44 @@ app.delete("/schedules/:id", async (req, res) => {
 
         res.status(500).json({
             error: "削除失敗"
+        });
+    }
+});
+
+app.put("/schedules/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const {
+            date,
+            time,
+            category,
+            title,
+            memo
+        } = req.body;
+
+        const result = await pool.query(
+            `
+            UPDATE schedules
+            SET
+                date = $1,
+                time = $2,
+                category = $3,
+                title = $4,
+                memo = $5
+            WHERE id = $6
+            RETURNING *
+            `,
+            [date, time, category, title, memo, id]
+        );
+
+        res.json(result.rows[0]);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "更新失敗"
         });
     }
 });
