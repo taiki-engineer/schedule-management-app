@@ -29,7 +29,7 @@ closeModalBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
 });
 
-saveEditBtn.addEventListener("click", () => {
+saveEditBtn.addEventListener("click", async () => {
 
     let categoryColor = "";
 
@@ -55,25 +55,63 @@ saveEditBtn.addEventListener("click", () => {
 
     if (editingSchedule) {
 
-        // 編集
-        editingSchedule.date = editDate.value;
-        editingSchedule.time = editTime.value;
-        editingSchedule.category = editCategory.value;
-        editingSchedule.title = editTitle.value;
-        editingSchedule.memo = editMemo.value;
-        editingSchedule.categoryColor = categoryColor;
+        try {
+            const response = await fetch(
+                `http://localhost:3000/schedules/${editingSchedule.id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        date: editDate.value,
+                        time: editTime.value,
+                        category: editCategory.value,
+                        title: editTitle.value,
+                        memo: editMemo.value
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("更新失敗");
+            }
+
+            await loadSchedules();
+
+        } catch (error) {
+            console.error(error);
+        }
 
     } else {
 
-        // 新規追加
-        schedules.push({
-            date: editDate.value,
-            time: editTime.value,
-            category: editCategory.value,
-            title: editTitle.value,
-            memo: editMemo.value,
-            categoryColor
-        });
+        try {
+                const response = await fetch(
+                    "http://localhost:3000/schedules",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            date: editDate.value,
+                            time: editTime.value,
+                            category: editCategory.value,
+                            title: editTitle.value,
+                            memo: editMemo.value
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("追加失敗");
+                }
+
+                await loadSchedules();
+
+            } catch (error) {
+                console.error(error);
+            }
 
     }
 
@@ -84,6 +122,8 @@ saveEditBtn.addEventListener("click", () => {
 
     modal.classList.add("hidden");
 });
+
+
 
 modal.addEventListener("click", (e) => {
 
