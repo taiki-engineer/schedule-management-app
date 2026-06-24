@@ -206,6 +206,52 @@ async function loadSchedules() {
     }
 }
 
+async function loadTasks() {
+
+    try {
+
+        const response =
+            await fetch("http://localhost:3000/tasks");
+
+        const data = await response.json();
+
+        tasks = data.map(task => {
+
+            let categoryColor = "gray";
+
+            if (task.category === "仕事") {
+                categoryColor = "red";
+            }
+
+            if (task.category === "勉強") {
+                categoryColor = "blue";
+            }
+
+            if (task.category === "運動") {
+                categoryColor = "green";
+            }
+
+            if (task.category === "プライベート") {
+                categoryColor = "purple";
+            }
+
+            return {
+                ...task,
+                categoryColor
+            };
+        });
+
+        renderTask();
+        renderHome();
+
+    } catch (error) {
+
+        console.error("タスク取得失敗", error);
+
+    }
+
+}
+
 
 function createCalendar() {
     // 今日の日付取得
@@ -463,6 +509,7 @@ function renderCalendarSchedules() {
 }
 
 loadSchedules();
+loadTasks();
 
 const homeMenu = document.querySelector(".home-menu");
 const scheduleMenu = document.querySelector(".schedule-menu");
@@ -645,7 +692,7 @@ function renderList() {
     });
 }
 
-taskAddBtn.addEventListener("click", () => {
+taskAddBtn.addEventListener("click", async () => {
 
     const category = taskCategory.value;
 
@@ -666,17 +713,35 @@ taskAddBtn.addEventListener("click", () => {
         categoryColor = "gray";
     }
 
-    const task = {
-        text: taskInput.value,
-        category,
-        categoryColor,
-        completed: false
-    };
+    try {
 
-    tasks.push(task);
-    console.log(task);
-    renderTask();
-    renderHome();
+        const response =
+            await fetch(
+                "http://localhost:3000/tasks",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                        "application/json"
+                    },
+                    body: JSON.stringify({
+                        text: taskInput.value,
+                        category
+                    })
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error("保存失敗");
+        }
+
+        await loadTasks();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
 })
 
 function renderTask() {
@@ -713,12 +778,31 @@ function renderTask() {
 
         const deleteBtn = item.querySelector(".delete-task-btn");
 
-        deleteBtn.addEventListener("click", () => {
-            tasks = tasks.filter(t => t !== task);
+        deleteBtn.addEventListener("click", async () => {
 
-            renderTask();
-            renderHome();
-        })
+            try {
+
+                const response =
+                    await fetch(
+                        `http://localhost:3000/tasks/${task.id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+                if (!response.ok) {
+                    throw new Error("削除失敗");
+                }
+
+                await loadTasks();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        });
 
         taskListContainer.appendChild(item);
     });
@@ -805,6 +889,7 @@ function renderHomeStats() {
     const todayCount = schedules.filter(schedule => schedule.date === today).length;
     todayScheduleCount.textContent = todayCount;
 }
+
 
 
 
