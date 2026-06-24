@@ -108,6 +108,33 @@ app.delete("/schedules/:id", async (req, res) => {
     }
 });
 
+app.delete("/tasks/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await pool.query(
+            "DELETE FROM tasks WHERE id = $1",
+            [id]
+        );
+
+        res.json({
+            message: "削除成功"
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "削除失敗"
+        });
+
+    }
+
+});
+
 app.put("/schedules/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -145,6 +172,57 @@ app.put("/schedules/:id", async (req, res) => {
         });
     }
 });
+
+app.get("/tasks", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM tasks ORDER BY created_at DESC"
+        );
+
+        res.json(result.rows);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "取得失敗"
+        });
+    }
+});
+
+app.post("/tasks", async (req, res) => {
+
+    const {
+        text,
+        category
+    } = req.body;
+
+    try {
+
+        const result = await pool.query(
+            `
+            INSERT INTO tasks
+            (text, category)
+            VALUES ($1, $2)
+            RETURNING *
+            `,
+            [text, category]
+        );
+
+        res.status(201).json(result.rows[0]);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "保存失敗"
+        });
+
+    }
+
+});
+
+
 
 app.listen(3000, () => {
     console.log("server start");
