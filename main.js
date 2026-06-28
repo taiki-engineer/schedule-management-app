@@ -769,12 +769,36 @@ function renderTask() {
 
         checkbox.checked = task.completed;
 
-        checkbox.addEventListener("change", () => {
-            task.completed = checkbox.checked;
+        checkbox.addEventListener("change", async () => {
 
-            renderTask();
-            renderHome();
-        })
+            try {
+
+                const response = await fetch(
+                    `http://localhost:3000/tasks/${task.id}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            completed: checkbox.checked
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("更新失敗");
+                }
+
+                await loadTasks();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        });
 
         const deleteBtn = item.querySelector(".delete-task-btn");
 
@@ -889,7 +913,6 @@ function renderHomeStats() {
     const todayCount = schedules.filter(schedule => schedule.date === today).length;
     todayScheduleCount.textContent = todayCount;
 }
-
 
 
 
