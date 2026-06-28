@@ -176,6 +176,10 @@ body {
     border-radius: 6px;
     color: white;
     margin-top: 5px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .empty {
@@ -474,15 +478,33 @@ body {
 
     .day,
     .empty {
-        min-height: 60px;
+        min-height: 100px;
+    }
+
+    .day p {
+        font-size: 9px;
+    }
+
+    .day-number {
+        font-size: 14px;
+    }
+
+    .schedule-item {
+        font-size: 8px;
+        padding: 2px 4px;
+        margin-top: 3px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .calender-area {
         padding: 10px;
     }
 
-        .calender {
-        gap: 4px;
+    .calender {
+        gap: 2px;
     }
 
     .mobile-schedule-section {
@@ -605,6 +627,20 @@ body {
         font-weight: bold;
     }
 
+    .task-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .task-form {
+        width: 100%;
+        margin-bottom: 15px;
+        order: -1;
+    }
+
+    .task-list-container {
+        margin-right: 0;
+    }
 
 }
 
