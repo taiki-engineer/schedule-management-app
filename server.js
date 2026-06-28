@@ -222,6 +222,36 @@ app.post("/tasks", async (req, res) => {
 
 });
 
+app.put("/tasks/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+        const { completed } = req.body;
+
+        const result = await pool.query(
+            `
+            UPDATE tasks
+            SET completed = $1
+            WHERE id = $2
+            RETURNING *
+            `,
+            [completed, id]
+        );
+
+        res.json(result.rows[0]);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "更新失敗"
+        });
+
+    }
+
+});
 
 
 app.listen(3000, () => {
