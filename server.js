@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -253,7 +255,91 @@ app.put("/tasks/:id", async (req, res) => {
 
 });
 
+app.post("/register", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // ① 既存チェック
+        const exist = await pool.query(
+            "SELECT * FROM users WHERE email = $1",
+            [email]
+        );
+
+        if (exist.rows.length > 0) {
+            return res.status(400).json({
+                message: "そのユーザーは既に存在しています"
+            });
+        }
+
+        // ② パスワード暗号化
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // ③ DB保存
+        const result = await pool.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+            [email, hashedPassword]
+        );
+
+        // ④ トークン発行
+        const token = jwt.sign(
+            { id: result.rows[0].id, email },
+            "SECRET_KEY",
+            { expiresIn: "24h" }
+        );
+
+        res.json({ token });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "登録失敗" });
+    }
+});
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // ① ユーザー検索
+        const result = await pool.query(
+            "SELECT * FROM users WHERE email = $1",
+            [email]
+        );
+
+        const user = result.rows[0];
+
+        // ② ユーザー存在チェック
+        if (!user) {
+            return res.status(400).json({
+                message: "ユーザーが存在しません"
+            });
+        }
+
+        // ③ パスワード確認
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({
+                message: "パスワードが違います"
+            });
+        }
+
+        // ④ トークン発行
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            "SECRET_KEY",
+            { expiresIn: "24h" }
+        );
+
+        res.json({ token });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "ログイン失敗" });
+    }
+});
 
 app.listen(3000, () => {
     console.log("server start");
 })
+
+
