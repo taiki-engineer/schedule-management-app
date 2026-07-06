@@ -1,3 +1,9 @@
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "login.html";
+}
+
 const calender = document.querySelector(".calender");
 const scheduleList = document.querySelector(".schedule-list");
 const monthTitle = document.querySelector(".month-title");
@@ -407,25 +413,13 @@ addButton.addEventListener("click", async () => {
         categoryColor = "gray";
     }
 
-    // schedules.push({
-    //     date,
-    //     time,
-    //     title,
-    //     memo,
-    //     category,
-    //     categoryColor
-    // });
-
-    // createCalendar();
-    // renderCalendarSchedules();
-
-    // renderHome();
 
     try {
     const response = await fetch("http://localhost:3000/schedules", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify({
             date,
@@ -515,6 +509,7 @@ const homeMenu = document.querySelector(".home-menu");
 const scheduleMenu = document.querySelector(".schedule-menu");
 const listMenu = document.querySelector(".list-menu");
 const taskMenu = document.querySelector(".task-menu");
+const logoutMenu = document.querySelector(".logout-menu");
 
 const homePage = document.querySelector(".home-page");
 const schedulePage = document.querySelector(".schedule-page");
@@ -593,6 +588,11 @@ listMenu.addEventListener("click", () => {
 taskMenu.addEventListener("click", () => {
     hidePages();
     taskPage.classList.remove("hidden");
+});
+
+logoutMenu.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
 });
 
 
