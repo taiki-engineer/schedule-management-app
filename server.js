@@ -9,6 +9,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+function auth(req, res, next) {
+    const header = req.headers.authorization;
+
+    if (!header) {
+        return res.status(401).json({ message: "tokenなし" });
+    }
+
+    const token = header.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(token, "SECRET_KEY");
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: "token無効" });
+    }
+}
+
 const pool = new Pool({
     user: "postgres",
     host: "localhost",
@@ -33,7 +51,7 @@ app.get("/test-db", async (req, res) => {
     }
 })
 
-app.post("/schedules", async (req, res) => {
+app.post("/schedules", auth, async (req, res) => {
     try {
         console.log("受信データ:", req.body);
 
@@ -45,14 +63,16 @@ app.post("/schedules", async (req, res) => {
             memo
         } = req.body;
 
+        const userId = req.user.id;
+
         const result = await pool.query(
             `
             INSERT INTO schedules
-            (date,time,category,title,memo)
-            VALUES ($1,$2,$3,$4,$5)
+            (user_id,date,time,category,title,memo)
+            VALUES ($1,$2,$3,$4,$5,$6)
             RETURNING *
             `,
-            [date,time,category,title,memo]
+            [userId,date,time,category,title,memo]
         );
 
         res.status(201).json(result.rows[0]);
@@ -67,14 +87,19 @@ app.post("/schedules", async (req, res) => {
     
 });
 
-app.get("/schedules", async (req, res) => {
+app.get("/schedules", auth, async (req, res) => {
     try {
+
+        const userId = req.user.id;
 
         const result = await pool.query(`
             SELECT *
             FROM schedules
+            WHERE user_id = $1
             ORDER BY date, time
-            `);
+            `,
+            [userId]
+        );
 
             res.json(result.rows);
     } catch(error) {
@@ -86,14 +111,16 @@ app.get("/schedules", async (req, res) => {
     }
 });
 
-app.delete("/schedules/:id", async (req, res) => {
+app.delete("/schedules/:id", auth, async (req, res) => {
     try {
+
+        const userId = req.user.id;
         const { id } = req.params;
 
         await pool.query(
             `
             DELETE FROM schedules
-            WHERE id = $1
+            WHERE id = $1 AND user_id = $2
             `,
             [id]
         );
@@ -110,15 +137,16 @@ app.delete("/schedules/:id", async (req, res) => {
     }
 });
 
-app.delete("/tasks/:id", async (req, res) => {
+app.delete("/tasks/:id", auth, async (req, res) => {
 
     try {
 
+        const userId = req.user.id;
         const { id } = req.params;
 
         await pool.query(
-            "DELETE FROM tasks WHERE id = $1",
-            [id]
+            "DELETE FROM tasks WHERE id = $1 AND user_id = $2",
+            [id, userId]
         );
 
         res.json({
@@ -137,7 +165,7 @@ app.delete("/tasks/:id", async (req, res) => {
 
 });
 
-app.put("/schedules/:id", async (req, res) => {
+app.put("/schedules/:id", auth, async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -175,10 +203,13 @@ app.put("/schedules/:id", async (req, res) => {
     }
 });
 
-app.get("/tasks", async (req, res) => {
+app.get("/tasks", auth, async (req, res) => {
     try {
+        const userId = req.user.id;
+        
         const result = await pool.query(
-            "SELECT * FROM tasks ORDER BY created_at DESC"
+            "SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC",
+            [userId]
         );
 
         res.json(result.rows);
@@ -191,7 +222,7 @@ app.get("/tasks", async (req, res) => {
     }
 });
 
-app.post("/tasks", async (req, res) => {
+app.post("/tasks", auth, async (req, res) => {
 
     const {
         text,
@@ -200,14 +231,16 @@ app.post("/tasks", async (req, res) => {
 
     try {
 
+        const userId = req.user.id;
+
         const result = await pool.query(
             `
             INSERT INTO tasks
-            (text, category)
-            VALUES ($1, $2)
+            (text, category, user_id)
+            VALUES ($1, $2, $3)
             RETURNING *
             `,
-            [text, category]
+            [text, category,userId]
         );
 
         res.status(201).json(result.rows[0]);
@@ -224,7 +257,7 @@ app.post("/tasks", async (req, res) => {
 
 });
 
-app.put("/tasks/:id", async (req, res) => {
+app.put("/tasks/:id", auth, async (req, res) => {
 
     try {
 
