@@ -122,7 +122,7 @@ app.delete("/schedules/:id", auth, async (req, res) => {
             DELETE FROM schedules
             WHERE id = $1 AND user_id = $2
             `,
-            [id]
+            [id,userId]
         );
 
         res.json({
