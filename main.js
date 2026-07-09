@@ -67,7 +67,8 @@ saveEditBtn.addEventListener("click", async () => {
                 {
                     method: "PUT",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
                     },
                     body: JSON.stringify({
                         date: editDate.value,
@@ -97,7 +98,8 @@ saveEditBtn.addEventListener("click", async () => {
                     {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`
                         },
                         body: JSON.stringify({
                             date: editDate.value,
@@ -170,7 +172,11 @@ let tasks = [];
 
 async function loadSchedules() {
     try {
-        const response = await fetch("http://localhost:3000/schedules");
+        const response = await fetch("http://localhost:3000/schedules", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        });
 
         const data = await response.json();
 
@@ -217,7 +223,11 @@ async function loadTasks() {
     try {
 
         const response =
-            await fetch("http://localhost:3000/tasks");
+            await fetch("http://localhost:3000/tasks", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            });
 
         const data = await response.json();
 
@@ -667,7 +677,10 @@ function renderList() {
                 const response = await fetch(
                     `http://localhost:3000/schedules/${schedule.id}`,
                     {
-                        method: "DELETE"
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`
+                        }
                     }
                 );
 
@@ -722,7 +735,8 @@ taskAddBtn.addEventListener("click", async () => {
                     method: "POST",
                     headers: {
                         "Content-Type":
-                        "application/json"
+                        "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
                     },
                     body: JSON.stringify({
                         text: taskInput.value,
@@ -778,7 +792,8 @@ function renderTask() {
                     {
                         method: "PUT",
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`
                         },
                         body: JSON.stringify({
                             completed: checkbox.checked
@@ -810,7 +825,10 @@ function renderTask() {
                     await fetch(
                         `http://localhost:3000/tasks/${task.id}`,
                         {
-                            method: "DELETE"
+                            method: "DELETE",
+                            headers: {
+                                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                            }
                         }
                     );
 
