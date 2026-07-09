@@ -8,6 +8,12 @@
 </head>
 <body>
 
+    <script>
+        if (!localStorage.getItem("token")) {
+            window.location.href = "login.html";
+        }
+    </script>
+
     <header class="mobile-header">
 
         <button class="menu-btn">☰</button>
@@ -45,7 +51,6 @@
         </aside>
 
         <section class="home-page hidden">
-            <h2>ホーム</h2>
 
             <div class="stats-container">
                 <div class="stat-card">
@@ -156,13 +161,11 @@
         </section>
 
         <section class="list-page hidden">
-            <h2>予定一覧</h2>
             
             <div class="schedule-list-container"></div>
         </section>
 
         <section class="task-page hidden">
-            <h2>タスク一覧</h2>
 
             <div class="task-container">
 

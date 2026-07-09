@@ -4,59 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新規登録</title>
+    <link rel="stylesheet" href="./login.css">
 </head>
 <body>
 
-  <h2>ユーザー登録</h2>
+    <div class="login-container">
+        <h2>ユーザー登録</h2>
 
-  <input type="email" id="email" placeholder="メールアドレス">
-  <input type="password" id="password" placeholder="パスワード">
+        <label for="email">メールアドレス</label>
+        <input 
+            type="email"
+            id="email"
+            placeholder="メールアドレス">
 
-  <button id="registerBtn">登録</button>
+        <label for="password">パスワード</label>
+        <input
+            type="password"
+            id="password"
+            placeholder="パスワード">
 
-  <p id="message"></p>
+        <button id="registerBtn">登録</button>
 
-  <script>
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const registerBtn = document.getElementById("registerBtn");
-    const message = document.getElementById("message");
+        <p id="message"></p>
 
-    registerBtn.addEventListener("click", async () => {
+        <p>
+            登録済みですか？
+            <a href="login.html">ログインはこちら</a>
+        </p>
+    </div>
 
-      try {
-        const res = await fetch("http://localhost:3000/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email: email.value,
-            password: password.value
-          })
+    <script>
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const registerBtn = document.getElementById("registerBtn");
+        const message = document.getElementById("message");
+
+        registerBtn.addEventListener("click", async () => {
+
+            try {
+                const res = await fetch("http://localhost:3000/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value
+                })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                message.textContent = data.message || "登録失敗";
+                return;
+                }
+
+                message.textContent = "登録成功！";
+
+                // 2秒後にログインへ
+                setTimeout(() => {
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "login.html";
+                }, 2000);
+
+            } catch (err) {
+                console.error(err);
+                message.textContent = "エラー発生";
+            }
+
         });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          message.textContent = data.message || "登録失敗";
-          return;
-        }
-
-        message.textContent = "登録成功！ログイン画面へ移動";
-
-        // 2秒後にログインへ
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
-
-      } catch (err) {
-        console.error(err);
-        message.textContent = "エラー発生";
-      }
-
-    });
-  </script>
+    </script>
 
 </body>
 </html>
