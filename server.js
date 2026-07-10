@@ -3,6 +3,7 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 function auth(req, res, next) {
+
     const header = req.headers.authorization;
 
     if (!header) {
@@ -27,13 +29,22 @@ function auth(req, res, next) {
     }
 }
 
-const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "schedule_app",
-    password: "postgres123",
-    port: 5432,
-})
+const pool = new Pool(
+    process.env.DATABASE_URL
+        ? {
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
+        : {
+            user: "postgres",
+            host: "localhost",
+            database: "schedule_app",
+            password: "postgres123",
+            port: 5432
+        }
+);
 
 app.get("/", (req, res) => {
     res.send("API起動中");
@@ -371,8 +382,10 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("server start");
-})
+
+
+app.listen(PORT, () => {
+    console.log(`server start: ${PORT}`);
+});
 
 
