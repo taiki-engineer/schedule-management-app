@@ -21,7 +21,7 @@ function auth(req, res, next) {
     const token = header.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, "SECRET_KEY");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
         next();
     } catch (err) {
@@ -327,7 +327,7 @@ app.post("/register", async (req, res) => {
         // ④ トークン発行
         const token = jwt.sign(
             { id: result.rows[0].id, email },
-            "SECRET_KEY",
+            process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
 
@@ -370,7 +370,7 @@ app.post("/login", async (req, res) => {
         // ④ トークン発行
         const token = jwt.sign(
             { id: user.id, email: user.email },
-            "SECRET_KEY",
+            process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
 
