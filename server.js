@@ -382,7 +382,13 @@ app.post("/login", async (req, res) => {
     }
 });
 
-
+pool.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+  );
+`);
 
 app.listen(PORT, () => {
     console.log(`server start: ${PORT}`);
