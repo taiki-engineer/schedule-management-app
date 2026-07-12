@@ -4,7 +4,7 @@ const passwordInput = document.querySelector(".login-password");
 
 loginBtn.addEventListener("click", async () => {
     try {
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch("https://schedule-management-app-l8cp.onrender.com/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

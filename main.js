@@ -18,6 +18,7 @@ const taskListContainer = document.querySelector(".task-list-container");
 const taskAddBtn = document.querySelector(".task-add-btn");
 const taskInput = document.querySelector(".task-input");
 const taskCategory = document.querySelector(".task-category");
+const API_URL = "https://schedule-management-app-l8cp.onrender.com";
 // スマホ版
 const modal = document.querySelector(".modal");
 const closeModalBtn = document.querySelector(".close-modal-btn");
@@ -63,7 +64,7 @@ saveEditBtn.addEventListener("click", async () => {
 
         try {
             const response = await fetch(
-                `http://localhost:3000/schedules/${editingSchedule.id}`,
+                `${API_URL}/schedules/${editingSchedule.id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -94,7 +95,7 @@ saveEditBtn.addEventListener("click", async () => {
 
         try {
                 const response = await fetch(
-                    "http://localhost:3000/schedules",
+                    "${API_URL}/schedules",
                     {
                         method: "POST",
                         headers: {
@@ -172,7 +173,7 @@ let tasks = [];
 
 async function loadSchedules() {
     try {
-        const response = await fetch("http://localhost:3000/schedules", {
+        const response = await fetch("${API_URL}/schedules", {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             }
@@ -223,7 +224,7 @@ async function loadTasks() {
     try {
 
         const response =
-            await fetch("http://localhost:3000/tasks", {
+            await fetch("${API_URL}/tasks", {
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem("token")
                 }
@@ -425,7 +426,7 @@ addButton.addEventListener("click", async () => {
 
 
     try {
-    const response = await fetch("http://localhost:3000/schedules", {
+    const response = await fetch("${API_URL}/schedules", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -675,7 +676,7 @@ function renderList() {
 
             try {
                 const response = await fetch(
-                    `http://localhost:3000/schedules/${schedule.id}`,
+                    `${API_URL}/schedules/${schedule.id}`,
                     {
                         method: "DELETE",
                         headers: {
@@ -730,7 +731,7 @@ taskAddBtn.addEventListener("click", async () => {
 
         const response =
             await fetch(
-                "http://localhost:3000/tasks",
+                "${API_URL}/tasks",
                 {
                     method: "POST",
                     headers: {
@@ -788,7 +789,7 @@ function renderTask() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:3000/tasks/${task.id}`,
+                    `${API_URL}/tasks/${task.id}`,
                     {
                         method: "PUT",
                         headers: {
@@ -823,7 +824,7 @@ function renderTask() {
 
                 const response =
                     await fetch(
-                        `http://localhost:3000/tasks/${task.id}`,
+                        `${API_URL}/tasks/${task.id}`,
                         {
                             method: "DELETE",
                             headers: {
