@@ -95,7 +95,7 @@ saveEditBtn.addEventListener("click", async () => {
 
         try {
                 const response = await fetch(
-                    "${API_URL}/schedules",
+                    `${API_URL}/schedules`,
                     {
                         method: "POST",
                         headers: {
@@ -173,7 +173,7 @@ let tasks = [];
 
 async function loadSchedules() {
     try {
-        const response = await fetch("${API_URL}/schedules", {
+        const response = await fetch(`${API_URL}/schedules`, {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             }
@@ -224,7 +224,7 @@ async function loadTasks() {
     try {
 
         const response =
-            await fetch("${API_URL}/tasks", {
+            await fetch(`${API_URL}/tasks`, {
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem("token")
                 }
@@ -426,7 +426,7 @@ addButton.addEventListener("click", async () => {
 
 
     try {
-    const response = await fetch("${API_URL}/schedules", {
+    const response = await fetch(`${API_URL}/schedules`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -731,7 +731,7 @@ taskAddBtn.addEventListener("click", async () => {
 
         const response =
             await fetch(
-                "${API_URL}/tasks",
+                `${API_URL}/tasks`,
                 {
                     method: "POST",
                     headers: {
