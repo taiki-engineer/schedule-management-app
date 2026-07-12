@@ -382,6 +382,8 @@ app.post("/login", async (req, res) => {
     }
 });
 
+
+
 pool.query(`
   CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -389,6 +391,34 @@ pool.query(`
     password TEXT NOT NULL
   );
 `);
+
+pool.query(`
+  CREATE TABLE IF NOT EXISTS schedules (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    memo TEXT
+  );
+`)
+.then(() => console.log("schedules table OK"))
+.catch(err => console.error(err));
+
+
+pool.query(`
+  CREATE TABLE IF NOT EXISTS tasks (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    completed BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`)
+.then(() => console.log("tasks table OK"))
+.catch(err => console.error(err));
 
 app.listen(PORT, () => {
     console.log(`server start: ${PORT}`);
